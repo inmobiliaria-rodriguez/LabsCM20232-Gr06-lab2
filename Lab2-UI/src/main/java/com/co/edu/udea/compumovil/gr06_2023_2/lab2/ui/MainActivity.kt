@@ -23,6 +23,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.core.view.WindowCompat
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.JetnewsApplication
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.workers.NotificationsWorker
 
 class MainActivity : ComponentActivity() {
 
@@ -36,5 +37,8 @@ class MainActivity : ComponentActivity() {
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
             JetnewsApp(appContainer, widthSizeClass)
         }
+
+        val app = application
+        NotificationsWorker.start(app.applicationContext)
     }
 }
