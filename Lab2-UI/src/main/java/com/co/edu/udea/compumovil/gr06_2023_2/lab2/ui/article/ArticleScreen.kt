@@ -18,7 +18,7 @@ package com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.article
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -53,20 +53,15 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.R
-import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.Result
-import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.posts.impl.BlockingFakePostsRepository
-import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.posts.impl.post3
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.room.PostEntity
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.room.PostViewModel
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.model.Post
-import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.theme.JetnewsTheme
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.utils.BookmarkButton
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.utils.FavoriteButton
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.utils.ShareButton
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.utils.TextSettingsButton
-import kotlinx.coroutines.runBlocking
 
 /**
  * Stateless Article Screen that displays a single post adapting the UI to different screen sizes.
@@ -87,7 +82,8 @@ fun ArticleScreen(
     isFavorite: Boolean,
     onToggleFavorite: () -> Unit,
     modifier: Modifier = Modifier,
-    lazyListState: LazyListState = rememberLazyListState()
+    lazyListState: LazyListState = rememberLazyListState(),
+    viewModel: PostViewModel
 ) {
     var showUnimplementedActionDialog by rememberSaveable { mutableStateOf(false) }
     if (showUnimplementedActionDialog) {
@@ -117,7 +113,18 @@ fun ArticleScreen(
                     BottomAppBar(
                         actions = {
                             FavoriteButton(onClick = { showUnimplementedActionDialog = true })
-                            BookmarkButton(isBookmarked = isFavorite, onClick = onToggleFavorite)
+                            BookmarkButton(isBookmarked = isFavorite, onClick = {
+                                val postEntity = PostEntity(
+                                    title = post.title,
+                                    subtitle = post.subtitle ?: "",
+                                    url = post.url,
+                                    id = post.id
+                                )
+                                viewModel.addPost(postEntity)
+                                Toast.makeText(context, "Successfully added!", Toast.LENGTH_LONG)
+                                    .show()
+                                onToggleFavorite
+                            })
                             ShareButton(onClick = { sharePost(post, context) })
                             TextSettingsButton(onClick = { showUnimplementedActionDialog = true })
                         }
@@ -241,32 +248,4 @@ fun sharePost(post: Post, context: Context) {
     )
 }
 
-@Preview("Article screen")
-@Preview("Article screen (dark)", uiMode = UI_MODE_NIGHT_YES)
-@Preview("Article screen (big font)", fontScale = 1.5f)
-@Composable
-fun PreviewArticleDrawer() {
-    JetnewsTheme {
-        val post = runBlocking {
-            (BlockingFakePostsRepository().getPost(post3.id) as Result.Success).data
-        }
-        ArticleScreen(post, false, {}, false, {})
-    }
-}
 
-@Preview("Article screen navrail", device = Devices.PIXEL_C)
-@Preview(
-    "Article screen navrail (dark)",
-    uiMode = UI_MODE_NIGHT_YES,
-    device = Devices.PIXEL_C
-)
-@Preview("Article screen navrail (big font)", fontScale = 1.5f, device = Devices.PIXEL_C)
-@Composable
-fun PreviewArticleNavRail() {
-    JetnewsTheme {
-        val post = runBlocking {
-            (BlockingFakePostsRepository().getPost(post3.id) as Result.Success).data
-        }
-        ArticleScreen(post, true, {}, false, {})
-    }
-}

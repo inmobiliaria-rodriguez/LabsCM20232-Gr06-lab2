@@ -26,10 +26,12 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.JetnewsApplication.Companion.JETNEWS_APP_URI
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.AppContainer
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.room.PostViewModel
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.home.HomeRoute
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.home.HomeViewModel
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.interests.InterestsRoute
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.interests.InterestsViewModel
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.savednews.SavedNewsComponent
 
 const val POST_ID = "postId"
 
@@ -41,6 +43,8 @@ fun JetnewsNavGraph(
     navController: NavHostController = rememberNavController(),
     openDrawer: () -> Unit = {},
     startDestination: String = JetnewsDestinations.HOME_ROUTE,
+    viewModel: PostViewModel
+
 ) {
     NavHost(
         navController = navController,
@@ -66,7 +70,17 @@ fun JetnewsNavGraph(
                 homeViewModel = homeViewModel,
                 isExpandedScreen = isExpandedScreen,
                 openDrawer = openDrawer,
+                viewModel = viewModel
             )
+        }
+        composable(route = JetnewsDestinations.SAVED_NEWS,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern =
+                        "$JETNEWS_APP_URI/${JetnewsDestinations.SAVED_NEWS}"
+                }
+            )) {
+            SavedNewsComponent(viewModel)
         }
         composable(JetnewsDestinations.INTERESTS_ROUTE) {
             val interestsViewModel: InterestsViewModel = viewModel(

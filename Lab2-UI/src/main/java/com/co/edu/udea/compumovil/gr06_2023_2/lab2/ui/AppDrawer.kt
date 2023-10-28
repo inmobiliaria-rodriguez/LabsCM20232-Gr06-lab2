@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ListAlt
+import androidx.compose.material.icons.rounded.AssignmentTurnedIn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,7 +48,8 @@ fun AppDrawer(
     navigateToHome: () -> Unit,
     navigateToInterests: () -> Unit,
     closeDrawer: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToSavedNews : () -> Unit
 ) {
     ModalDrawerSheet(modifier) {
         JetNewsLogo(
@@ -65,6 +67,13 @@ fun AppDrawer(
             icon = { Icon(Icons.Filled.ListAlt, null) },
             selected = currentRoute == JetnewsDestinations.INTERESTS_ROUTE,
             onClick = { navigateToInterests(); closeDrawer() },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+        )
+        NavigationDrawerItem(
+            label = { Text("Saved news") },
+            icon = { Icon(Icons.Rounded.AssignmentTurnedIn, null) },
+            selected = currentRoute == JetnewsDestinations.SAVED_NEWS,
+            onClick = { navigateToSavedNews(); closeDrawer() },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
     }
@@ -96,7 +105,8 @@ fun PreviewAppDrawer() {
             currentRoute = JetnewsDestinations.HOME_ROUTE,
             navigateToHome = {},
             navigateToInterests = {},
-            closeDrawer = { }
+            closeDrawer = { },
+            navigateToSavedNews = {}
         )
     }
 }

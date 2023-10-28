@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.AppContainer
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.room.PostViewModel
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.components.AppNavRail
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.theme.JetnewsTheme
 import kotlinx.coroutines.launch
@@ -47,6 +48,7 @@ import kotlinx.coroutines.launch
 fun JetnewsApp(
     appContainer: AppContainer,
     widthSizeClass: WindowWidthSizeClass,
+    viewModel: PostViewModel
 ) {
     JetnewsTheme {
         val navController = rememberNavController()
@@ -69,7 +71,8 @@ fun JetnewsApp(
                     currentRoute = currentRoute,
                     navigateToHome = navigationActions.navigateToHome,
                     navigateToInterests = navigationActions.navigateToInterests,
-                    closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } }
+                    closeDrawer = { coroutineScope.launch { sizeAwareDrawerState.close() } },
+                    navigateToSavedNews = navigationActions.navigateToSavedNews
                 )
             },
             drawerState = sizeAwareDrawerState,
@@ -89,6 +92,7 @@ fun JetnewsApp(
                     isExpandedScreen = isExpandedScreen,
                     navController = navController,
                     openDrawer = { coroutineScope.launch { sizeAwareDrawerState.open() } },
+                    viewModel = viewModel
                 )
             }
         }

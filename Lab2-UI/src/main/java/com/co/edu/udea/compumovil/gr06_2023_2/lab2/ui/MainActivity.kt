@@ -22,7 +22,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.ViewModelProvider
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.JetnewsApplication
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.room.PostDataBase
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.room.PostViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -30,11 +33,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
+        val database = PostDataBase.getDataBase(this)
+        val viewModel : PostViewModel
+        viewModel = ViewModelProvider(this).get(PostViewModel::class.java)
         val appContainer = (application as JetnewsApplication).container
         setContent {
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
-            JetnewsApp(appContainer, widthSizeClass)
+            //
+            JetnewsApp(appContainer, widthSizeClass, viewModel)
         }
     }
 }

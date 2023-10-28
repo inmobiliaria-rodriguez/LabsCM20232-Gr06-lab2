@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.room.PostViewModel
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.article.ArticleScreen
 
 /**
@@ -42,7 +43,8 @@ fun HomeRoute(
     homeViewModel: HomeViewModel,
     isExpandedScreen: Boolean,
     openDrawer: () -> Unit,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    viewModel: PostViewModel
 ) {
     // UiState of the HomeScreen
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
@@ -59,6 +61,7 @@ fun HomeRoute(
         onSearchInputChanged = { homeViewModel.onSearchInputChanged(it) },
         openDrawer = openDrawer,
         snackbarHostState = snackbarHostState,
+        viewModel = viewModel
     )
 }
 
@@ -91,7 +94,8 @@ fun HomeRoute(
     onInteractWithArticleDetails: (String) -> Unit,
     onSearchInputChanged: (String) -> Unit,
     openDrawer: () -> Unit,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    viewModel: PostViewModel
 ) {
     // Construct the lazy list states for the list and the details outside of deciding which one to
     // show. This allows the associated state to survive beyond that decision, and therefore
@@ -153,7 +157,8 @@ fun HomeRoute(
                 },
                 lazyListState = articleDetailLazyListStates.getValue(
                     uiState.selectedPost.id
-                )
+                ),
+                viewModel = viewModel
             )
 
             // If we are just showing the detail, have a back press switch to the list.

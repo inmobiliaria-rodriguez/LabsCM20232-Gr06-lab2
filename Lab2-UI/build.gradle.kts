@@ -17,6 +17,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -147,6 +148,17 @@ dependencies {
     // Robolectric dependencies
     testImplementation(libs.androidx.compose.ui.test.junit4)
     testImplementation(libs.robolectric)
+
+
+
+    // Room components
+    val roomVersion = "2.5.2"
+    implementation("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-runtime:$roomVersion")
+
+
+
 }
 
 tasks.withType<Test>().configureEach {
