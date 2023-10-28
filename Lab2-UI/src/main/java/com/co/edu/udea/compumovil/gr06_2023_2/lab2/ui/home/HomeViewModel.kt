@@ -104,7 +104,7 @@ private data class HomeViewModelState(
                 // If there is none (or that post isn't in the current feed), default to the
                 // highlighted post
                 selectedPost = postsFeed.allPosts.find {
-                    it.id == selectedPostId
+                    it.source.id == selectedPostId
                 } ?: postsFeed.highlightedPost,
                 isArticleOpen = isArticleOpen,
                 favorites = favorites,

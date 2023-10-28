@@ -58,8 +58,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.R
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.Result
-import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.posts.impl.BlockingFakePostsRepository
-import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.posts.impl.post3
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.model.Post
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.theme.JetnewsTheme
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.utils.BookmarkButton
@@ -149,7 +147,7 @@ private fun ArticleScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = post.publication?.name.orEmpty(),
+                title = post.title,
                 navigationIconContent = navigationIconContent,
                 scrollBehavior = scrollBehavior
             )
@@ -239,34 +237,4 @@ fun sharePost(post: Post, context: Context) {
             context.getString(R.string.article_share_post)
         )
     )
-}
-
-@Preview("Article screen")
-@Preview("Article screen (dark)", uiMode = UI_MODE_NIGHT_YES)
-@Preview("Article screen (big font)", fontScale = 1.5f)
-@Composable
-fun PreviewArticleDrawer() {
-    JetnewsTheme {
-        val post = runBlocking {
-            (BlockingFakePostsRepository().getPost(post3.id) as Result.Success).data
-        }
-        ArticleScreen(post, false, {}, false, {})
-    }
-}
-
-@Preview("Article screen navrail", device = Devices.PIXEL_C)
-@Preview(
-    "Article screen navrail (dark)",
-    uiMode = UI_MODE_NIGHT_YES,
-    device = Devices.PIXEL_C
-)
-@Preview("Article screen navrail (big font)", fontScale = 1.5f, device = Devices.PIXEL_C)
-@Composable
-fun PreviewArticleNavRail() {
-    JetnewsTheme {
-        val post = runBlocking {
-            (BlockingFakePostsRepository().getPost(post3.id) as Result.Success).data
-        }
-        ArticleScreen(post, true, {}, false, {})
-    }
 }

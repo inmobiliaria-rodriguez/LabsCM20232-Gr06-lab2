@@ -69,10 +69,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.R
-import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.posts.impl.post3
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.model.Markup
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.model.MarkupType
-import com.co.edu.udea.compumovil.gr06_2023_2.lab2.model.Metadata
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.model.Paragraph
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.model.ParagraphType
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.model.Post
@@ -101,13 +99,13 @@ fun LazyListScope.postContentItems(post: Post) {
         Spacer(Modifier.height(defaultSpacerSize))
         Text(post.title, style = MaterialTheme.typography.headlineLarge)
         Spacer(Modifier.height(8.dp))
-        if (post.subtitle != null) {
-            Text(post.subtitle, style = MaterialTheme.typography.bodyMedium)
+        if (post.description != null) {
+            Text(post.description, style = MaterialTheme.typography.bodyMedium)
             Spacer(Modifier.height(defaultSpacerSize))
         }
     }
-    item { PostMetadata(post.metadata, Modifier.padding(bottom = 24.dp)) }
-    items(post.paragraphs) { Paragraph(paragraph = it) }
+    item { PostMetadata(post, Modifier.padding(bottom = 24.dp)) }
+    item(post.content) { Paragraph(paragraph = post.content) }
 }
 
 @Composable
@@ -116,17 +114,17 @@ private fun PostHeaderImage(post: Post) {
         .heightIn(min = 180.dp)
         .fillMaxWidth()
         .clip(shape = MaterialTheme.shapes.medium)
-    Image(
-        painter = painterResource(post.imageId),
-        contentDescription = null, // decorative
-        modifier = imageModifier,
-        contentScale = ContentScale.Crop
-    )
+    //Image(
+    //    painter = painterResource(post.imageId),
+    //    contentDescription = null, // decorative
+    //    modifier = imageModifier,
+    //    contentScale = ContentScale.Crop
+    //)
 }
 
 @Composable
 private fun PostMetadata(
-    metadata: Metadata,
+    post: Post,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -143,61 +141,25 @@ private fun PostMetadata(
         Spacer(Modifier.width(8.dp))
         Column {
             Text(
-                text = metadata.author.name,
+                text = post.author,
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier.padding(top = 4.dp)
-            )
-
-            Text(
-                text = stringResource(
-                    id = R.string.article_post_min_read,
-                    formatArgs = arrayOf(
-                        metadata.date,
-                        metadata.readTimeMinutes
-                    )
-                ),
-                style = MaterialTheme.typography.bodySmall
             )
         }
     }
 }
 
 @Composable
-private fun Paragraph(paragraph: Paragraph) {
-    val (textStyle, paragraphStyle, trailingPadding) = paragraph.type.getTextAndParagraphStyle()
+private fun Paragraph(paragraph: String) {
 
-    val annotatedString = paragraphToAnnotatedString(
-        paragraph,
-        MaterialTheme.typography,
-        MaterialTheme.colorScheme.codeBlockBackground
-    )
-    Box(modifier = Modifier.padding(bottom = trailingPadding)) {
-        when (paragraph.type) {
-            ParagraphType.Bullet -> BulletParagraph(
-                text = annotatedString,
-                textStyle = textStyle,
-                paragraphStyle = paragraphStyle
-            )
-            ParagraphType.CodeBlock -> CodeBlockParagraph(
-                text = annotatedString,
-                textStyle = textStyle,
-                paragraphStyle = paragraphStyle
-            )
-            ParagraphType.Header -> {
-                Text(
-                    modifier = Modifier.padding(4.dp),
-                    text = annotatedString,
-                    style = textStyle.merge(paragraphStyle)
-                )
-            }
-            else -> Text(
+    Box(modifier = Modifier.padding(14.dp)) {
+            Text(
                 modifier = Modifier.padding(4.dp),
-                text = annotatedString,
-                style = textStyle
+                text = paragraph
             )
         }
-    }
 }
+
 
 @Composable
 private fun CodeBlockParagraph(
@@ -341,14 +303,3 @@ fun Markup.toAnnotatedStringItem(
 
 private val ColorScheme.codeBlockBackground: Color
     get() = onSurface.copy(alpha = .15f)
-
-@Preview("Post content")
-@Preview("Post content (dark)", uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun PreviewPost() {
-    JetnewsTheme {
-        Surface {
-            PostContent(post = post3)
-        }
-    }
-}

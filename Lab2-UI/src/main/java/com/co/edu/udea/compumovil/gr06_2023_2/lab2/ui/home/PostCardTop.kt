@@ -53,12 +53,12 @@ fun PostCardTop(post: Post, modifier: Modifier = Modifier) {
             .heightIn(min = 180.dp)
             .fillMaxWidth()
             .clip(shape = MaterialTheme.shapes.medium)
-        Image(
-            painter = painterResource(post.imageId),
-            contentDescription = null, // decorative
-            modifier = imageModifier,
-            contentScale = ContentScale.Crop
-        )
+        //Image(
+        //    painter = painterResource(post.imageId),
+        //    contentDescription = null, // decorative
+        //    modifier = imageModifier,
+        //    contentScale = ContentScale.Crop
+        //)
         Spacer(Modifier.height(16.dp))
 
         Text(
@@ -67,18 +67,12 @@ fun PostCardTop(post: Post, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Text(
-            text = post.metadata.author.name,
+            text = post.author,
             style = typography.labelLarge,
             modifier = Modifier.padding(bottom = 4.dp)
         )
         Text(
-            text = stringResource(
-                id = R.string.home_post_min_read,
-                formatArgs = arrayOf(
-                    post.metadata.date,
-                    post.metadata.readTimeMinutes
-                )
-            ),
+            text = post.publishedAt,
             style = typography.bodySmall
         )
     }

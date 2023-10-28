@@ -43,7 +43,7 @@ class FakePostsRepository : PostsRepository {
 
     override suspend fun getPost(postId: String?): Result<Post> {
         return withContext(Dispatchers.IO) {
-            val post = posts.allPosts.find { it.id == postId }
+            val post = posts.allPosts.find { it.source.id == postId }
             if (post == null) {
                 Result.Error(IllegalArgumentException("Post not found"))
             } else {
@@ -54,7 +54,7 @@ class FakePostsRepository : PostsRepository {
 
     override suspend fun getPostsFeed(): Result<PostsFeed> {
         return withContext(Dispatchers.IO) {
-            delay(800) // pretend we're on a slow network
+            //delay(800) // pretend we're on a slow network
             if (shouldRandomlyFail()) {
                 Result.Error(IllegalStateException())
             } else {

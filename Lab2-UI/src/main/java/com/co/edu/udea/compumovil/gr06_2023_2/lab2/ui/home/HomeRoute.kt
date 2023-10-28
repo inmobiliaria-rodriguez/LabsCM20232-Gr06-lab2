@@ -21,10 +21,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.model.PostAPIResponseModel
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.article.ArticleScreen
 
 /**
@@ -101,8 +103,8 @@ fun HomeRoute(
         is HomeUiState.HasPosts -> uiState.postsFeed.allPosts
         is HomeUiState.NoPosts -> emptyList()
     }.associate { post ->
-        key(post.id) {
-            post.id to rememberLazyListState()
+        key(post.source.id) {
+            post.source.id to rememberLazyListState()
         }
     }
 
@@ -147,12 +149,12 @@ fun HomeRoute(
                 post = uiState.selectedPost,
                 isExpandedScreen = isExpandedScreen,
                 onBack = onInteractWithFeed,
-                isFavorite = uiState.favorites.contains(uiState.selectedPost.id),
+                isFavorite = uiState.favorites.contains(uiState.selectedPost.source.id),
                 onToggleFavorite = {
-                    onToggleFavorite(uiState.selectedPost.id)
+                    onToggleFavorite(uiState.selectedPost.source.id)
                 },
                 lazyListState = articleDetailLazyListStates.getValue(
-                    uiState.selectedPost.id
+                    uiState.selectedPost.source.id
                 )
             )
 

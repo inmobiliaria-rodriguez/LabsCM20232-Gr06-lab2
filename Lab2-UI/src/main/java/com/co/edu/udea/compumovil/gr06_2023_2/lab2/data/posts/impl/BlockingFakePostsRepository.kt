@@ -31,7 +31,7 @@ import kotlinx.coroutines.withContext
 /**
  * Implementation of PostsRepository that returns a hardcoded list of
  * posts with resources synchronously.
- */
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class BlockingFakePostsRepository : PostsRepository {
 
@@ -42,7 +42,7 @@ class BlockingFakePostsRepository : PostsRepository {
 
     override suspend fun getPost(postId: String?): Result<Post> {
         return withContext(Dispatchers.IO) {
-            val post = posts.allPosts.find { it.id == postId }
+            val post = posts.allPosts.find { it.source.id == postId }
             if (post == null) {
                 Result.Error(IllegalArgumentException("Unable to find post"))
             } else {
@@ -63,3 +63,4 @@ class BlockingFakePostsRepository : PostsRepository {
         favorites.update { it.addOrRemove(postId) }
     }
 }
+ */

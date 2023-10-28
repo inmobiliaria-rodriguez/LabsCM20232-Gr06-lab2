@@ -20,14 +20,23 @@ package com.co.edu.udea.compumovil.gr06_2023_2.lab2.model
  * A container of [Post]s, partitioned into different categories.
  */
 data class PostsFeed(
-    val highlightedPost: Post,
-    val recommendedPosts: List<Post>,
-    val popularPosts: List<Post>,
-    val recentPosts: List<Post>,
+    var highlightedPost: Post,
+    var recommendedPosts: List<Post>
 ) {
     /**
      * Returns a flattened list of all posts contained in the feed.
      */
+    constructor() : this(Post(Source("",""),"","","","", "", "", "",),listOf(Post(Source("",""),"","","","", "", "", "",)))
+
+    init {
+        val postAPIReponse  = PostAPIResponseModel()
+        postAPIReponse.getPostsList()
+        println("ESTOY EJECUTANDO ESTE CONSTRUCTOOOOOOOOOOOOOOOOOOR")
+        highlightedPost = postAPIReponse.postsList.get(0)
+        recommendedPosts = postAPIReponse.postsList.drop(1)
+    }
+
     val allPosts: List<Post> =
-        listOf(highlightedPost) + recommendedPosts + popularPosts + recentPosts
+        listOf(highlightedPost) + recommendedPosts
 }
+

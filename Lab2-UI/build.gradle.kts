@@ -101,6 +101,10 @@ dependencies {
     androidTestImplementation(composeBom)
 
     implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.0.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
 
     implementation(libs.kotlin.stdlib)

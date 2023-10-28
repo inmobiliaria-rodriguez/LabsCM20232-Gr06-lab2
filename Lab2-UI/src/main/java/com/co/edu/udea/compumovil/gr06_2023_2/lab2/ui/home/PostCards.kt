@@ -48,7 +48,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.R
-import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.posts.impl.post3
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.model.Post
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.theme.JetnewsTheme
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.ui.utils.BookmarkButton
@@ -60,13 +59,7 @@ fun AuthorAndReadTime(
 ) {
     Row(modifier) {
         Text(
-            text = stringResource(
-                id = R.string.home_post_min_read,
-                formatArgs = arrayOf(
-                    post.metadata.author.name,
-                    post.metadata.readTimeMinutes
-                )
-            ),
+            text = post.author,
             style = MaterialTheme.typography.bodyMedium
         )
     }
@@ -74,13 +67,13 @@ fun AuthorAndReadTime(
 
 @Composable
 fun PostImage(post: Post, modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(post.imageThumbId),
-        contentDescription = null, // decorative
-        modifier = modifier
-            .size(40.dp, 40.dp)
-            .clip(MaterialTheme.shapes.small)
-    )
+    //Image(
+    //    painter = painterResource(post.imageThumbId),
+    //    contentDescription = null, // decorative
+    //    modifier = modifier
+    //        .size(40.dp, 40.dp)
+    //        .clip(MaterialTheme.shapes.small)
+    //)
 }
 
 @Composable
@@ -103,7 +96,7 @@ fun PostCardSimple(
     val bookmarkAction = stringResource(if (isFavorite) R.string.unbookmark else R.string.bookmark)
     Row(
         modifier = Modifier
-            .clickable(onClick = { navigateToArticle(post.id) })
+            .clickable(onClick = { navigateToArticle(post.source.id) })
             .semantics {
                 // By defining a custom action, we tell accessibility services that this whole
                 // composable has an action attached to it. The accessibility service can choose
@@ -142,7 +135,7 @@ fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
 
     Row(
         Modifier
-            .clickable(onClick = { navigateToArticle(post.id) })
+            .clickable(onClick = { navigateToArticle(post.source.id) })
     ) {
         PostImage(
             post = post,
@@ -216,27 +209,6 @@ fun BookmarkButtonBookmarkedPreview() {
     JetnewsTheme {
         Surface {
             BookmarkButton(isBookmarked = true, onClick = { })
-        }
-    }
-}
-
-@Preview("Simple post card")
-@Preview("Simple post card (dark)", uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun SimplePostPreview() {
-    JetnewsTheme {
-        Surface {
-            PostCardSimple(post3, {}, false, {})
-        }
-    }
-}
-
-@Preview("Post History card")
-@Composable
-fun HistoryPostPreview() {
-    JetnewsTheme {
-        Surface {
-            PostCardHistory(post3, {})
         }
     }
 }

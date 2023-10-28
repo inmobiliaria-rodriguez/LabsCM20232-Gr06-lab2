@@ -59,16 +59,16 @@ fun DpSize.toPostLayout(): PostLayout {
     }
 }
 
-private fun Context.authorReadTimeString(author: String, readTimeMinutes: Int) =
+private fun Context.authorReadTimeString(author: String) =
     getString(R.string.home_post_min_read)
-        .format(author, readTimeMinutes)
+        .format(author)
 
 private fun openPostDetails(context: Context, post: Post): Action {
     // actionStartActivity is the preferred way to start activities.
     return actionStartActivity(
         Intent(
             Intent.ACTION_VIEW,
-            "$JETNEWS_APP_URI/home?postId=${post.id}".toUri(),
+            "$JETNEWS_APP_URI/home?postId=${post.source.id}".toUri(),
             context,
             MainActivity::class.java
         )
@@ -122,29 +122,28 @@ fun HorizontalPost(
         modifier = modifier.clickable(onClick = openPostDetails(context, post))
     ) {
         if (showImageThumbnail) {
-            PostImage(
-                imageId = post.imageThumbId,
-                contentScale = ContentScale.Fit,
-                modifier = GlanceModifier.size(80.dp)
-            )
+            //PostImage(
+            //    imageId = post.imageThumbId,
+            //    contentScale = ContentScale.Fit,
+            //    modifier = GlanceModifier.size(80.dp)
+            //)
         } else {
-            PostImage(
-                imageId = post.imageId,
-                contentScale = ContentScale.Crop,
-                modifier = GlanceModifier.width(250.dp)
-            )
+            //PostImage(
+            //    imageId = post.imageId,
+            //    contentScale = ContentScale.Crop,
+            //    modifier = GlanceModifier.width(250.dp)
+            //)
         }
         PostDescription(
             title = post.title,
             metadata = context.authorReadTimeString(
-                author = post.metadata.author.name,
-                readTimeMinutes = post.metadata.readTimeMinutes
+                author = post.author
             ),
             modifier = GlanceModifier.defaultWeight().padding(horizontal = 20.dp)
         )
         BookmarkButton(
-            id = post.id,
-            isBookmarked = bookmarks.contains(post.id),
+            id = post.source.id,
+            isBookmarked = bookmarks.contains(post.source.id),
             onToggleBookmark = onToggleBookmark
         )
     }
@@ -162,21 +161,20 @@ fun VerticalPost(
         verticalAlignment = Alignment.Vertical.CenterVertically,
         modifier = modifier.clickable(onClick = openPostDetails(context, post))
     ) {
-        PostImage(imageId = post.imageId, modifier = GlanceModifier.fillMaxWidth())
+        //PostImage(imageId = post.imageId, modifier = GlanceModifier.fillMaxWidth())
         Spacer(modifier = GlanceModifier.height(4.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             PostDescription(
                 title = post.title,
                 metadata = context.authorReadTimeString(
-                    author = post.metadata.author.name,
-                    readTimeMinutes = post.metadata.readTimeMinutes
+                    author = post.author
                 ),
                 modifier = GlanceModifier.defaultWeight()
             )
             Spacer(modifier = GlanceModifier.width(10.dp))
             BookmarkButton(
-                id = post.id,
-                isBookmarked = bookmarks.contains(post.id),
+                id = post.source.id,
+                isBookmarked = bookmarks.contains(post.source.id),
                 onToggleBookmark = onToggleBookmark
             )
         }
