@@ -24,8 +24,10 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.JetnewsApplication
+import com.co.edu.udea.compumovil.gr06_2023_2.lab2.workers.NotificationsWorker
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.room.PostDataBase
 import com.co.edu.udea.compumovil.gr06_2023_2.lab2.data.room.PostViewModel
+
 
 class MainActivity : ComponentActivity() {
 
@@ -42,5 +44,8 @@ class MainActivity : ComponentActivity() {
             //
             JetnewsApp(appContainer, widthSizeClass, viewModel)
         }
+
+        val app = application
+        NotificationsWorker.start(app.applicationContext)
     }
 }

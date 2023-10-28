@@ -101,6 +101,9 @@ dependencies {
     implementation(composeBom)
     androidTestImplementation(composeBom)
 
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+
+
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlinx.coroutines.android)
 
